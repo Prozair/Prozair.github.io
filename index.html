@@ -215,7 +215,7 @@
         
         const API_URL = 'https://api.bitkub.com/api/market/ticker';
         const TARGET_PAIR = 'THB_WLD'; 
-        const UPDATE_INTERVAL = 5000; // 5 วินาที <--- แก้ไขที่นี่
+        const UPDATE_INTERVAL = 20000; // 20 วินาที <--- แก้ไขที่นี่
 
         let previousPrice = null;
 
@@ -283,7 +283,7 @@
             }
         }
 
-        // เริ่มต้นการทำงานสำหรับราคา WLD (5 วินาที)
+        // เริ่มต้นการทำงานสำหรับราคา WLD (20 วินาที)
         updateWLDPrice();
         setInterval(updateWLDPrice, UPDATE_INTERVAL);
         
@@ -291,3 +291,4 @@
 </body>
 
 </html>
+
