@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WLD Price Frame - Bitkub THB (Final Version)</title>
+    <style>
+        /* ------------------------------------------------------------------
+           CSS: การออกแบบกรอบรูป
+           ------------------------------------------------------------------ */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f0f2f5;
+            font-family: Arial, sans-serif;
+        }
+
+        .price-frame {
+            border: 5px solid #0000FF; 
+            border-radius: 15px;
+            padding: 20px 30px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            width: 300px;
+        }
+
+        /* ------------------------------------------------------------------
+           สไตล์สำหรับนาฬิกาดิจิทัล
+           ------------------------------------------------------------------ */
+        .digital-clock {
+            font-size: 2.5em; 
+            font-weight: bold;
+            color: #0000FF; 
+            margin-bottom: 20px; 
+            padding-bottom: 10px;
+            border-bottom: 3px solid #f0f2f5; 
+        }
+
+
+        .header {
+            font-size: 1.2em;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .wld-price-display {
+            font-size: 2.8em;
+            font-weight: bold;
+            color: #0000FF;
+            margin-bottom: 10px;
+            min-height: 1.5em; 
+        }
+
+        .last-update {
+            font-size: 0.85em;
+            color: #666;
+            margin-bottom: 15px; 
+        }
+        
+        .status {
+            font-size: 0.75em;
+            color: #888;
+            margin-top: 5px;
+            margin-bottom: 5px; 
+        }
+
+        .personal-info {
+            border-top: 1px solid #eee;
+            padding-top: 10px;
+            margin-top: 15px;
+            font-size: 0.9em;
+            color: #0000FF; 
+            font-weight: bold;
+        }
+
+        .personal-info .facebook-logo {
+            vertical-align: middle; 
+            margin-left: 8px; 
+            width: 20px; 
+            height: 20px;
+        }
+        
+        .personal-info a {
+            color: #0000FF; 
+            text-decoration: none; 
+        }
+
+        /* ------------------------------------------------------------------
+           สไตล์สำหรับส่วน "สนใจสมัคร World App"
+           ------------------------------------------------------------------ */
+        .world-app-join {
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+            margin-top: 15px;
+            font-size: 1em;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .world-app-join a {
+            color: #0000FF;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            margin-top: 5px;
+        }
+
+        .world-app-join .worldapp-logo {
+            width: 24px;
+            height: 24px;
+            margin-right: 8px;
+        }
+        
+        /* ------------------------------------------------------------------
+           สไตล์สำหรับส่วน "เพิ่มเพื่อนไลน์"
+           ------------------------------------------------------------------ */
+        .line-join {
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+            margin-top: 15px;
+            font-size: 1em;
+            font-weight: bold;
+        }
+        
+        .line-join a {
+            color: #00B900;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            margin-top: 5px;
+        }
+
+        .line-join .line-logo {
+            width: 24px; 
+            height: 24px;
+            margin-right: 8px;
+        }
+
+        .price-up {
+            color: green;
+        }
+
+        .price-down {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="price-frame">
+        <div id="digital-clock" class="digital-clock">00:00:00</div>
+        
+        <div class="header">Worldcoin (WLD) Price (Bitkub)</div>
+        <div id="wld-price" class="wld-price-display">Loading...</div>
+        <div id="price-status" class="status"></div>
+        <div id="current-time" class="last-update"></div>
+        
+        <div class="personal-info">
+            พี่แซ พิจิตร
+            <a href="https://www.facebook.com/P.zair888" target="_blank"> 
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/2021_Facebook_icon.svg/1024px-2021_Facebook_icon.svg.png" 
+                     alt="Facebook Logo" 
+                     class="facebook-logo">
+            </a>
+            <br>
+            โทร. <a href="tel:0617012888">061-701-2888</a>
+        </div>
+
+        
+        <div class="world-app-join">
+            <a href="https://worldcoin.org/join/TS6666J" target="_blank">
+                <img src="https://world.org/favicon/safari-pinned-tab.svg" 
+                     alt="World App Logo" 
+                     class="worldapp-logo">
+                สนใจสมัคร World App
+            </a>
+        </div>
+        
+        <div class="line-join">
+            <a href="https://line.me/ti/p/S-X7FHp-6c" target="_blank">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/LINE_logo.svg/240px-Line_H_Logo.svg.png" 
+                     alt="Line Logo" 
+                     class="line-logo">
+                เพิ่มเพื่อนไลน์
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // ------------------------------------------------------------------
+        // ฟังก์ชันสำหรับอัปเดตนาฬิกาดิจิทัลทุก 1 วินาที
+        // ------------------------------------------------------------------
+        function updateClock() {
+            const now = new Date();
+            const options = { 
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit', 
+                hour12: false 
+            };
+            const timeString = now.toLocaleTimeString('en-US', options); 
+            document.getElementById('digital-clock').innerText = timeString;
+        }
+        
+        updateClock();
+        setInterval(updateClock, 1000); // อัปเดตนาฬิกาทุก 1 วินาที
+
+        // ------------------------------------------------------------------
+        // JavaScript: ใช้ Bitkub API ตรงๆ (ระวัง CORS)
+        // ------------------------------------------------------------------
+        
+        const API_URL = 'https://api.bitkub.com/api/market/ticker';
+        const TARGET_PAIR = 'THB_WLD'; 
+        const UPDATE_INTERVAL = 5000; // 5 วินาที <--- แก้ไขที่นี่
+
+        let previousPrice = null;
+
+        async function updateWLDPrice() {
+            const priceElement = document.getElementById('wld-price');
+            const timeElement = document.getElementById('current-time');
+            const statusElement = document.getElementById('price-status');
+            
+            priceElement.innerText = 'Fetching...';
+            timeElement.innerText = '';
+            statusElement.innerText = '';
+
+            try {
+                // เรียกใช้ Bitkub API โดยตรง
+                const response = await fetch(API_URL);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP Status Error: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                if (!data[TARGET_PAIR] || !data[TARGET_PAIR].last) {
+                     throw new Error(`Pair ${TARGET_PAIR} not found or data missing.`);
+                }
+                
+                const currentPrice = parseFloat(data[TARGET_PAIR].last);
+                
+                // 1. อัปเดตราคา
+                priceElement.innerText = `฿${currentPrice.toFixed(2)}`;
+                
+                // 2. แสดงสถานะการเปลี่ยนแปลงราคา
+                if (previousPrice !== null) {
+                    statusElement.classList.remove('price-up', 'price-down');
+                    if (currentPrice > previousPrice) {
+                        statusElement.innerText = '▲ Price Up';
+                        statusElement.classList.add('price-up');
+                    } else if (currentPrice < previousPrice) {
+                        statusElement.innerText = '▼ Price Down';
+                        statusElement.classList.add('price-down');
+                    } else {
+                        statusElement.innerText = '— ไม่เปลี่ยนแปลง'; 
+                    }
+                } else {
+                    statusElement.innerText = 'โหลดครั้งแรก'; 
+                }
+                
+                previousPrice = currentPrice;
+
+                // 3. อัปเดตวันที่และเวลาปัจจุบัน 
+                const updateTime = new Date(); 
+                const dateString = updateTime.toLocaleDateString('th-TH', { 
+                    day: 'numeric', 
+                    month: 'short', 
+                    year: 'numeric' 
+                });
+                const timeString = updateTime.toLocaleTimeString('th-TH');
+                timeElement.innerText = `อัปเดตล่าสุด: ${dateString} เวลา ${timeString}`; 
+                
+            } catch (error) {
+                console.error("Critical API Error:", error);
+                priceElement.innerText = 'API Error (CORS Blocked)';
+                statusElement.innerText = '';
+                timeElement.innerText = `[⚠️ ไม่สามารถดึง Bitkub ได้] ลองใช้ CoinGecko API แทน`; 
+            }
+        }
+
+        // เริ่มต้นการทำงานสำหรับราคา WLD (5 วินาที)
+        updateWLDPrice();
+        setInterval(updateWLDPrice, UPDATE_INTERVAL);
+        
+    </script>
+</body>
+</html>
